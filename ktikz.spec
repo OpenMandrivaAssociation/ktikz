@@ -1,13 +1,13 @@
 %define name	ktikz
-%define version 0.9
-%define rel	70
+%define version 0.10
+%define rel	83
 %define release %mkrel 0.svn%rel
 
 Summary:	Program for creating diagrams with TikZ
 Name:		%{name}
 Version:	%{version}
 Release:	%{release}
-Source0:	%{name}-%{version}.tar.gz
+Source0:	%{name}-%{version}.tar.bz2
 License:	GPLv3+
 Group:		Graphics
 Url:		http://www.hackenberger.at/ktikz/
@@ -53,12 +53,15 @@ chmod a+x examples
 %__install -d -m 755 %{buildroot}%{_mandir}/man1/
 %__install -m 644 debian/ktikz.1 %{buildroot}%{_mandir}/man1/
 
+ln -s /usr/bin/qtikz %{buildroot}%{_bindir}/ktikz
+
 %clean
 %__rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root)
 %doc Changelog LICENSE.* TODO examples/
+%{_bindir}/qtikz
 %{_bindir}/%{name}
 %{_datadir}/%{name}/*
 %{_datadir}/applications/%{name}.desktop
