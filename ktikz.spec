@@ -1,6 +1,6 @@
 %define name	ktikz
 %define version 0.10
-%define rel	83
+%define rel	140
 %define release %mkrel 0.svn%rel
 
 Summary:	Program for creating diagrams with TikZ
@@ -13,7 +13,7 @@ Group:		Graphics
 Url:		http://www.hackenberger.at/ktikz/
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Requires:	tetex-latex, poppler
-BuildRequires:	qt4-devel
+BuildRequires:	qt4-devel, qt4-assistant
 BuildRequires:	libpoppler-qt4-devel
 
 %description
@@ -24,6 +24,8 @@ KtikZ is a small application for creating diagrams with TikZ.
 
 %build
 sed -i -e 's,PREFIX = \/usr,PREFIX = %{buildroot}\/usr,' conf.pri
+sed -i -e 's,lrelease-qt4,lrelease,' conf.pri
+
 %qmake_qt4
 %make
 
@@ -62,7 +64,7 @@ ln -s /usr/bin/qtikz %{buildroot}%{_bindir}/ktikz
 %defattr(-,root,root)
 %doc Changelog LICENSE.* TODO examples/
 %{_bindir}/qtikz
-%{_bindir}/%{name}
-%{_datadir}/%{name}/*
-%{_datadir}/applications/%{name}.desktop
-%{_mandir}/man1/%{name}.*
+%{_bindir}/*tikz
+%{_datadir}/qtikz/*
+%{_datadir}/applications/*tikz.desktop
+%{_mandir}/man1/*tikz.*
