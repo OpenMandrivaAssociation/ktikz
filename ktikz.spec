@@ -1,6 +1,6 @@
 %define name	ktikz
-%define version 0.10
-%define rel	140
+%define version 0.11
+%define rel	149
 %define release %mkrel 0.svn%rel
 
 Summary:	Program for creating diagrams with TikZ
@@ -13,49 +13,55 @@ Group:		Graphics
 Url:		http://www.hackenberger.at/ktikz/
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Requires:	tetex-latex, poppler
-BuildRequires:	qt4-devel, qt4-assistant
+BuildRequires:	qt4-devel >= 4.6.0, qt4-assistant >= 4.6.0
 BuildRequires:	libpoppler-qt4-devel
+BuildRequires:	kdelibs4-devel
 
 %description
-KtikZ is a small application for creating diagrams with TikZ.
+KtikZ is a small KDE application for creating diagrams with TikZ.
+
+%package -n qtikz
+Summary:	Program for creating diagrams with TikZ
+Group:		Graphics
+
+%description -n qtikz
+QtikZ is a small application for creating diagrams with TikZ.
 
 %prep
-%setup -q
+%setup -q 
 
 %build
-sed -i -e 's,PREFIX = \/usr,PREFIX = %{buildroot}\/usr,' conf.pri
-sed -i -e 's,lrelease-qt4,lrelease,' conf.pri
+sed -i -e 's,lrelease-qt4,lrelease,' qtikzconfig.pri
+sed -i -e 's,\#MIME_INSTALL,MIME_INSTALL,' qtikzconfig.pri
+sed -i -e 's,\/usr\/share\/mime\/packages,\$\$\{PREFIX\}\/share\/mime\/packages,' qtikzconfig.pri
 
-%qmake_qt4
+mkdir buildqt
+pushd buildqt
+%qmake_qt4 ../qtikz.pro
 %make
+popd
+
+mkdir buildkde
+pushd buildkde
+cmake -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr ..
+%make
+popd
 
 %install
 %__rm -rf %{buildroot}
+
+pushd buildqt
+INSTALL_ROOT=%{buildroot} %make install 
+popd
+pushd buildkde
 %make install 
+rm -rf %{buildroot}%{_datadir}/mime/[agimstX]* %{buildroot}%{_datadir}/mime/text
+popd
 
-cat > %{buildroot}%_datadir/applications/ktikz.desktop <<EOF
-[Desktop Entry]
-Encoding=UTF-8
-Type=Application
-Name=KTikZ
-Exec=ktikz
-Icon=/usr/share/ktikz/ktikz-128.png
-DocPath=
-Terminal=false
-MimeType=text/x-pgf;text/x-tex;
-Categories=Qt;KDE;Office;
-GenericName=TikZ editor
-GenericName[fr]=Éditeur TikZ
-Comment=Program for creating TikZ (from the LaTeX pgf package) diagrams
-Comment[fr]=Programme pour créer des diagrammes TikZ (du paquet LaTeX pgf)
-EOF
-chmod -R a+r Changelog LICENSE.* TODO examples/ debian/ktikz.1
+mv data/examples examples
+
+chmod -R a+r Changelog LICENSE.* TODO examples/
 chmod a+x examples
-
-%__install -d -m 755 %{buildroot}%{_mandir}/man1/
-%__install -m 644 debian/ktikz.1 %{buildroot}%{_mandir}/man1/
-
-ln -s /usr/bin/qtikz %{buildroot}%{_bindir}/ktikz
 
 %clean
 %__rm -rf %{buildroot}
@@ -63,8 +69,24 @@ ln -s /usr/bin/qtikz %{buildroot}%{_bindir}/ktikz
 %files
 %defattr(-,root,root)
 %doc Changelog LICENSE.* TODO examples/
+%{_bindir}/ktikz
+%{_bindir}/ktikz
+%{_libdir}/kde4/ktikz*so
+%{_datadir}/config.kcfg/ktikz*
+%{_datadir}/apps/ktikz*/*
+%{_datadir}/applications/kde4/ktikz.desktop
+%{_datadir}/kde4/services/ktikz*.desktop
+%{_datadir}/doc/*
+%{_iconsdir}/*/*/*/ktikz.*
+%{_datadir}/locale/*/*/ktikz.mo
+%{_datadir}/mime/packages/ktikz.xml
+%{_mandir}/man1/ktikz.*
+
+%files -n qtikz
+%defattr(-,root,root)
+%doc Changelog LICENSE.* TODO examples/
 %{_bindir}/qtikz
-%{_bindir}/*tikz
 %{_datadir}/qtikz/*
-%{_datadir}/applications/*tikz.desktop
-%{_mandir}/man1/*tikz.*
+%{_datadir}/applications/qtikz.desktop
+%{_datadir}/mime/packages/qtikz.xml
+%{_mandir}/man1/qtikz.*
