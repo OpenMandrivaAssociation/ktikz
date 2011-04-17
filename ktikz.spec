@@ -1,6 +1,6 @@
 %define name	ktikz
 %define version 0.11
-%define rel	166
+%define rel	166.1
 %define release %mkrel 0.svn%rel
 
 Summary:	Program for creating diagrams with TikZ
@@ -47,11 +47,8 @@ pushd buildqt
 %make
 popd
 
-mkdir buildkde
-pushd buildkde
-cmake -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr ..
+%cmake_kde4
 %make
-popd
 
 %install
 %__rm -rf %{buildroot}
@@ -59,8 +56,8 @@ popd
 pushd buildqt
 INSTALL_ROOT=%{buildroot} %make install 
 popd
-pushd buildkde
-%make install 
+pushd build
+%make DESTDIR=%{buildroot} install 
 rm -rf %{buildroot}%{_datadir}/mime/[agimstX]* %{buildroot}%{_datadir}/mime/text
 popd
 
