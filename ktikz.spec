@@ -1,12 +1,9 @@
 %define name	ktikz
-%define version 0.11
-%define rel	166.1
-%define release %mkrel 0.svn%rel
 
 Summary:	Program for creating diagrams with TikZ
 Name:		%{name}
-Version:	%{version}
-Release:	%{release}
+Version:	0.11.0svn194
+Release:	1
 Source0:	%{name}-%{version}.tar.bz2
 License:	GPLv3+
 Group:		Graphics
@@ -16,11 +13,6 @@ Requires:	tetex-latex, poppler
 BuildRequires:	qt4-devel >= 4.6.0, qt4-assistant >= 4.6.0
 BuildRequires:	libpoppler-qt4-devel
 BuildRequires:	kdelibs4-devel
-
-# Removing QMAKE_CXXFLAGS and QMAKE_LFLAGS that are not needed
-# since QMAKE_LFLAGS += `pkg-config --libs poppler-qt4` results in
-# '--libs --libs --libs' being added and failinf build.
-Patch00:	0001-fix-secure-QMAKE_CXXFLAGS-and-QMAKE_LFLAGS.patch
 
 %description
 KtikZ is a small KDE application for creating diagrams with TikZ.
@@ -34,7 +26,6 @@ QtikZ is a small application for creating diagrams with TikZ.
 
 %prep
 %setup -q 
-%patch00 -p1 -b .qmake-vars
 
 %build
 sed -i -e 's,lrelease-qt4,lrelease,' qtikzconfig.pri
