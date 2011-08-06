@@ -8,6 +8,7 @@ Source0:	%{name}-%{version}.tar.bz2
 License:	GPLv3+
 Group:		Graphics
 Url:		http://www.hackenberger.at/ktikz/
+
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Requires:	tetex-latex, poppler
 BuildRequires:	qt4-devel >= 4.6.0, qt4-assistant >= 4.6.0
@@ -26,6 +27,8 @@ QtikZ is a small application for creating diagrams with TikZ.
 
 %prep
 %setup -q 
+
+%apply_patches
 
 %build
 sed -i -e 's,lrelease-qt4,lrelease,' qtikzconfig.pri
