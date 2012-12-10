@@ -8,11 +8,10 @@ Source0:	%{name}-%{version}.tar.bz2
 License:	GPLv3+
 Group:		Graphics
 Url:		http://www.hackenberger.at/ktikz/
-
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Requires:	tetex-latex, poppler
-BuildRequires:	qt4-devel >= 4.6.0, qt4-assistant >= 4.6.0
-BuildRequires:	libpoppler-qt4-devel
+BuildRequires:	qt4-devel >= 4.6.0, 
+BuildRequires:	qt4-assistant >= 4.6.0
+BuildRequires:	pkgconfig(poppler-qt4)
 BuildRequires:	kdelibs4-devel
 
 %description
@@ -27,8 +26,6 @@ QtikZ is a small application for creating diagrams with TikZ.
 
 %prep
 %setup -q 
-
-%apply_patches
 
 %build
 sed -i -e 's,lrelease-qt4,lrelease,' qtikzconfig.pri
@@ -45,8 +42,6 @@ popd
 %make
 
 %install
-%__rm -rf %{buildroot}
-
 pushd buildqt
 INSTALL_ROOT=%{buildroot} %make install 
 popd
@@ -60,13 +55,9 @@ mv data/examples examples
 chmod -R a+r Changelog LICENSE.* TODO examples/
 chmod a+x examples
 
-%clean
-%__rm -rf %{buildroot}
 
 %files
-%defattr(-,root,root)
 %doc Changelog LICENSE.* TODO examples/
-%{_bindir}/ktikz
 %{_bindir}/ktikz
 %{_libdir}/kde4/ktikz*so
 %{_datadir}/config.kcfg/ktikz*
@@ -80,10 +71,11 @@ chmod a+x examples
 %{_mandir}/man1/ktikz.*
 
 %files -n qtikz
-%defattr(-,root,root)
 %doc Changelog LICENSE.* TODO examples/
 %{_bindir}/qtikz
 %{_datadir}/qtikz/*
 %{_datadir}/applications/qtikz.desktop
 %{_datadir}/mime/packages/qtikz.xml
 %{_mandir}/man1/qtikz.*
+
+
