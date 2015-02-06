@@ -3,7 +3,7 @@
 Summary:	Program for creating diagrams with TikZ
 Name:		%{name}
 Version:	0.11.0svn194
-Release:	1
+Release:	2
 Source0:	%{name}-%{version}.tar.bz2
 License:	GPLv3+
 Group:		Graphics
