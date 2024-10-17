@@ -7,7 +7,7 @@ Release:	2
 Source0:	%{name}-%{version}.tar.bz2
 License:	GPLv3+
 Group:		Graphics
-Url:		http://www.hackenberger.at/ktikz/
+Url:		https://www.hackenberger.at/ktikz/
 Requires:	tetex-latex, poppler
 BuildRequires:	qt4-devel >= 4.6.0, 
 BuildRequires:	qt4-assistant >= 4.6.0
