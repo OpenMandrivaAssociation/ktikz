@@ -9,6 +9,7 @@ License:	GPLv3+
 Group:		Graphics
 Url:		https://www.hackenberger.at/ktikz/
 Requires:	tetex-latex, poppler
+BuildRequires:	make
 BuildRequires:	qt4-devel >= 4.6.0, 
 BuildRequires:	qt4-assistant >= 4.6.0
 BuildRequires:	pkgconfig(poppler-qt4)
